@@ -1,6 +1,6 @@
 let { Sequelize, DataTypes } = require ('sequelize')
 
-let env = process.env.NODE_ENV || 'developement'
+let env = process.env.NODE_ENV || 'development'  //spelling fixed
 
 //if app is running at Herokie, Heroku will have set an enviornment vaiable
 // called NODE_ENV which will have the value 'production' so the ENV variable
@@ -9,7 +9,7 @@ let env = process.env.NODE_ENV || 'developement'
 // if the app is running on your computer, then ENV will be 'development'
 // app will use SQlite
 
-let config = require(__dirname, + '/../config.json')[env]
+let config = require(__dirname + '/../config.json')[env]
 
 let db = {}
 

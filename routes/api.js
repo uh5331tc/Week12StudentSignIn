@@ -1,5 +1,5 @@
 let express = require('express')
-let db = require('../modules')
+let db = require('../models') // the models directory 
 let Student = db.Student
 
 let router = express.Router()
