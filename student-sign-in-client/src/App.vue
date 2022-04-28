@@ -1,4 +1,5 @@
 <template id="template">
+  <div>
       <new-student-form 
       v-on:student-added="newStudentAdded">
       </new-student-form>
@@ -9,10 +10,8 @@
       v-on:delete-student="studentDeleted">
       </student-table>
 
-      <student-message
-      v-bind:student="mostRecentStudent">
-      </student-message>
-
+      <student-message v-bind:student="mostRecentStudent"></student-message>
+  </div>
 </template>
 
 <script>
@@ -34,38 +33,32 @@ export default {
       mostRecentStudent: []
     }
   },
+  mounted() {  // load all students - make request to API
+    this.updateStudents()
+  },
   methods: {
+    updateStudents(){
+      this.$student_api.getAllStudents().then(students => {
+        this.students = students
+      })
+    },
     newStudentAdded(student) {
-      this.students.push(student)
-      this.students.sort(function(s1, s2) {
-        return s1.name.toLowerCase() < s2.name.toLowerCase() ? -1 : 1
+      this.$student_api.addStudent(student).then ( () => {
+        this.updateStudents()
       })
     },
     studentArrivedOrLeft(student, present) {
-      // Found STUDENT in array of STUDENTS
-      // updated present attribute 
-
-      let updateStudent = this.students.find( function(s) {
-        if (s.name === student.name && s.starID === student.starID){
-          return true
-        }
+      student.present = present // update present value
+      this.$student_api.updateStudent(student).then( () => {
+        this.mostRecentStudent = student
+        this.updateStudents()
       })
-
-      //console.log(updateStudent)
-        if (updateStudent) {
-        updateStudent.present = present
-        this.mostRecentStudent = updateStudent
-      }
-    },
-    studentDeleted(student) { //filter returns a new array of all students that return true
-      this.students=this.students.filter( function(s){  // rename student deleted
-        if (s != student) {
-          return true
-        }
+   },
+    studentDeleted(student) { 
+      this.$student_api.deleteStudent(student.id).then( () => {
+        this.updateStudents()
+        this.mostRecentStudent = {} // clears welcome/goodbye messages
       })
-
-      // CLEAR WELCOME AND GOODBYE MESSAGE
-    this.mostRecentStudent = {}
     }
   }
 }

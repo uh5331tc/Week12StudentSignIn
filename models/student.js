@@ -1,17 +1,22 @@
 module.exports = (sequelize, DataTypes) => {
 
-    let student = sequelize.define('Student', {  //columns in the model
+    let Student = sequelize.define('Student', {  //columns in the model
 
         name: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            allowNull: false
         },
 
         starID: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            allowNull: false,
+            unique: true
         },
 
         present: {  
-            type: DataTypes.BOOLEAN
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
         }
     })
     // force specifies whether to drop the table or not 
@@ -19,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     // false = keep table 
 
 
-    Student.sync({force: true}).then( () => {
+    Student.sync({force: true }).then( () => {
         console.log('Synced student table ')
 
     })

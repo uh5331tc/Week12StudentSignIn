@@ -18,7 +18,22 @@ router.post('/students', function(req, res, next){
     })
 })
 
+// TODO EDIT STUDENT
+router.patch('/students/:id', function (req, res, next) { //ERROR?? CHANGED /'student(s)/:id'
+// studentID will be set to request 
+    let studentID = req.params.id
+    let updatedStudent = req.body
+    Student.update( updatedStudent, { where: { id: studentID} } )
+        .then ( () => {
+            return res.send('ok')
+        })
+})
+
+// TOODO DELETE STUDENT
+// 
+
+
+
+
 module.exports = router 
-
-
-
+// cant write anything after this line ^
