@@ -40,25 +40,38 @@ export default {
     updateStudents(){
       this.$student_api.getAllStudents().then(students => {
         this.students = students
-      })
+      }).catch( () => alert('Unable to fetch student list'))
     },
     newStudentAdded(student) {
       this.$student_api.addStudent(student).then ( () => {
         this.updateStudents()
       })
+      .catch(err => {
+        if (err.response.data && Arrary.isArray(err.response.data)) {
+        let msg = err.response.data.join(',')
+        alert('Error adding students\n' + msg)
+       } else { 
+        console.error('Error adding student', err.response)
+        alert('Sorry unable to add student')
+      }
+      })
     },
+
+
+
+
     studentArrivedOrLeft(student, present) {
       student.present = present // update present value
       this.$student_api.updateStudent(student).then( () => {
         this.mostRecentStudent = student
         this.updateStudents()
-      })
+      }).catch( () => alert('Unable to update student'))
    },
     studentDeleted(student) { 
       this.$student_api.deleteStudent(student.id).then( () => {
         this.updateStudents()
         this.mostRecentStudent = {} // clears welcome/goodbye messages
-      })
+      }).catch( () => alert('Unable to delete student'))
     }
   }
 }
